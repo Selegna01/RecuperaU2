@@ -1,3 +1,6 @@
+#Author:Estrad Angeles
+#Fecha:05/11/2025
+
 from flask import Flask, request, jsonify, render_template_string
 
 app = Flask(__name__)
@@ -83,3 +86,27 @@ def modificar_dispositivos():
     data = request.get_json()
     return jsonify({"mensaje": "Dispositivos agregado", "dispositivo": data}),201
 
+
+@app.route('/dispositivos/<id>', methods=['PUT'])
+def modificar_dispositivo(id):
+    if id not in dispositivos:
+        return jsonify({"error": "Dispositivo no encontrado"}), 404
+
+
+    data = request.get_json()
+    for clave, valor in data.items():
+        dispositivos[id][clave] = valor
+
+
+    return jsonify({"mensaje": "Dispositivo modificado", "dispositivo": dispositivos[id]}), 200
+
+@app.route('/', methods=['GET'])
+def test():
+    return "API funcionando correctamente"
+
+
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
